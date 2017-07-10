@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane fx:id="mainSplit" dividerPositions="0.7251264755480608" prefHeight="395.0" prefWidth="595.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sms.view.shift.ShiftChooserController">
+   <items>
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <children>
+            <VBox id="0" fx:id="mondayV" alignment="TOP_CENTER">
+               <children>
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="100.0" text="Montag" />
+               </children>
+            </VBox>
+            <VBox fx:id="tuesdayV">
+               <children>
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="100.0" text="Dienstag" />
+               </children>
+            </VBox>
+            <VBox fx:id="wednesdayV">
+               <children>
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="100.0" text="Mittwoch" />
+               </children>
+            </VBox>
+            <VBox fx:id="thursdayV">
+               <children>
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="100.0" text="Donnerstag" />
+               </children>
+            </VBox>
+            <VBox fx:id="fridayV">
+               <children>
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="100.0" text="Freitag" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <BorderPane fx:id="rightSplitBP" prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <Label prefHeight="28.0" prefWidth="30.0" text="Label" BorderPane.alignment="CENTER">
+               <opaqueInsets>
+                  <Insets left="100.0" />
+               </opaqueInsets>
+            </Label>
+         </top>
+         <center>
+            <FlowPane fx:id="empList" hgap="5.0" prefHeight="200.0" prefWidth="200.0" vgap="20.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding></FlowPane>
+         </center>
+      </BorderPane>
+   </items>
+</SplitPane>

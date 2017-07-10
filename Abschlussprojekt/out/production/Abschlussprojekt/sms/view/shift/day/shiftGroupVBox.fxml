@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="groupVBox" prefWidth="100.0" style="-fx-border-width: 3; -fx-border-color: #a9a9a9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sms.view.shift.day.ShiftGroupController">
+   <children>
+      <Label id="groupName" fx:id="groupName" alignment="CENTER" prefWidth="127.0" text="Label" />
+   </children>
+</VBox>
