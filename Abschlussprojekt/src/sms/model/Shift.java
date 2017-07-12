@@ -31,6 +31,8 @@ public class Shift {
         Shift s = new Shift();
         s.setId(1);
         s.setName("Chillig");
+        s.setBegin("13:00");
+        s.setEnd("17:00");
         s.setMonday(true);
         s.setTuesday(true);
         s.setWednesday(true);

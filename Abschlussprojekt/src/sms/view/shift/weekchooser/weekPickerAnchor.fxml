@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="213.0" prefWidth="219.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sms.view.shift.weekchooser.WeekPickerController">
+   <children>
+      <DatePicker fx:id="datePicker" layoutX="24.0" layoutY="14.0" prefHeight="77.0" prefWidth="171.0" AnchorPane.bottomAnchor="122.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="14.0" />
+      <Button fx:id="prefWeekButt" layoutX="24.0" layoutY="107.0" mnemonicParsing="false" text="Left" />
+      <Button fx:id="nextWeekButt" layoutX="143.0" layoutY="107.0" mnemonicParsing="false" text="Right" />
+   </children>
+</AnchorPane>

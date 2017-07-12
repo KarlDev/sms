@@ -1,5 +1,7 @@
 package sms.view.shift;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,9 +11,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import sms.MainController;
 import sms.model.Employee;
 import sms.model.Shift;
@@ -37,6 +37,8 @@ public class ShiftChooserController {
     private SplitPane mainSplit;
 
     @FXML
+    private HBox weekBox;
+    @FXML
     private VBox mondayV;
     @FXML
     private VBox tuesdayV;
@@ -53,19 +55,22 @@ public class ShiftChooserController {
     private BorderPane rightSplitBP;
 
     //Week that is currently selected
-    private int currentWeek = 1;
+    private SimpleIntegerProperty currentWeekID = new SimpleIntegerProperty();
 
     //Employees who can be assigned in current week
     private ObservableList<Employee> selectableEmps = FXCollections.observableArrayList();
 
     private ObservableList<ShiftGroup> shiftGroups = FXCollections.observableArrayList();
-    private ObservableList<Shift> allGenericShifts = Shift.getAllGenericShift();
-
 
     public MainController mc;
 
     @FXML
     private void initialize() {
+        currentWeekID.addListener((observable, oldValue, newValue) -> {
+            //Check for changes then change week
+
+            changeWeek(newValue.intValue());
+        });
     }
 
     public void setMainContoller(MainController mc) {
@@ -77,7 +82,6 @@ public class ShiftChooserController {
         mc.getEmpList().forEach((key, employee) -> {
             addEmployeeToSelection(employee);
         });
-        changeWeek(1);
     }
 
     public void addEmployeeToSelection(Employee emp) {
@@ -107,53 +111,88 @@ public class ShiftChooserController {
         return empList;
     }
 
-    private void changeWeek(int newWeekID) {
-        //First change week
-        currentWeek = newWeekID;
-        //and remove old ShiftGroups
+    public void changeWeek(int newWeekID) {
+        //Remove old ShiftGroups, and VBox
+        mondayV.getChildren().remove(1, mondayV.getChildren().size());
+        tuesdayV.getChildren().remove(1, tuesdayV.getChildren().size());
+        wednesdayV.getChildren().remove(1, wednesdayV.getChildren().size());
+        thursdayV.getChildren().remove(1, thursdayV.getChildren().size());
+        fridayV.getChildren().remove(1, fridayV.getChildren().size());
         shiftGroups = FXCollections.observableArrayList();
 
-        allGenericShifts.forEach(shift -> {
+        mc.getAllGenerecShifts().forEach(shift -> {
+            //init array of the days
+            boolean[] days = {shift.isMonday(), shift.isTuesday(), shift.isWednesday(), shift.isThursday(), shift.isFriday()};
 
-            //Load ShiftGroups for each Day
-            if(shift.isMonday()) {
-                //Constructor automatically loads EmpIDs from DB
-                ShiftGroup currentShiftGroup = new ShiftGroup(shift, currentWeek, MONDAY);
+            //iterate over days and load shift for each day
+            for (int day = 0; day < days.length; day++) {
+                if(days[day]) {
+                    //Constructor automatically loads EmpIDs from DB
+                    ShiftGroup currentShiftGroup = new ShiftGroup(shift, currentWeekID.get(), day);
 
-                //Set loader location to the Group VBox and load
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(groupVBoxURL);
+                    //Set loader location to the Group VBox and load
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(groupVBoxURL);
 
-                VBox groupBox = null;
-                try {
-                    groupBox = (VBox) loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    VBox groupBox = null;
+                    try {
+                        groupBox = (VBox) loader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Set the controller
+                    ShiftGroupController sgc = loader.getController();
+                    sgc.setGroupAndController(this, currentShiftGroup);
+
+                    //add to appropriate day
+                    switch (day) {
+                        case 0:
+                            mondayV.getChildren().add(groupBox);
+                            break;
+                        case 1:
+                            tuesdayV.getChildren().add(groupBox);
+                            break;
+                        case 2:
+                            wednesdayV.getChildren().add(groupBox);
+                            break;
+                        case 3:
+                            thursdayV.getChildren().add(groupBox);
+                            break;
+                        case 4:
+                            fridayV.getChildren().add(groupBox);
+                            break;
+                    }
                 }
-
-                ShiftGroupController sgc = loader.getController();
-                sgc.setGroupAndController(this, currentShiftGroup);
-
-                mondayV.getChildren().add(groupBox);
-            }
-            if(shift.isTuesday()) {
-                ShiftGroup currentShiftGroup = new ShiftGroup(shift, currentWeek, TUESDAY);
-
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(groupVBoxURL);
-
-                VBox groupBox = null;
-                try {
-                    groupBox = (VBox) loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                ShiftGroupController sgc = loader.getController();
-                sgc.setGroupAndController(this, currentShiftGroup);
-
-                tuesdayV.getChildren().add(groupBox);
             }
         });
+    }
+
+    public int getCurrentWeekID() {
+        return currentWeekID.get();
+    }
+
+    public SimpleIntegerProperty currentWeekIDProperty() {
+        return currentWeekID;
+    }
+
+    public void setCurrentWeekID(int currentWeekID) {
+        this.currentWeekID.set(currentWeekID);
+    }
+
+    public ObservableList<Employee> getSelectableEmps() {
+        return selectableEmps;
+    }
+
+    public void setSelectableEmps(ObservableList<Employee> selectableEmps) {
+        this.selectableEmps = selectableEmps;
+    }
+
+    public ObservableList<ShiftGroup> getShiftGroups() {
+        return shiftGroups;
+    }
+
+    public void setShiftGroups(ObservableList<ShiftGroup> shiftGroups) {
+        this.shiftGroups = shiftGroups;
     }
 }

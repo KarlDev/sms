@@ -3,6 +3,9 @@ package test;/**
  */
 
 import javafx.application.Application;
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -14,6 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import sms.MainController;
 
+import java.time.LocalDate;
+
 public class TestApp extends Application {
 
     public static void main(String[] args) {
@@ -22,7 +27,6 @@ public class TestApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        System.out.println("hi");
         BorderPane bp = new BorderPane();
 
         FXMLLoader loader = new FXMLLoader();
@@ -47,6 +51,10 @@ public class TestApp extends Application {
             e.consume();
         });
         bp.setCenter(myDrag);
+
+        LocalDate now = LocalDate.now();
+
+        System.out.println(now.minusDays( now.getDayOfWeek().getValue() - 1 ).getDayOfWeek().getValue());
 
         primaryStage.setScene(new Scene(bp));
         primaryStage.show();
