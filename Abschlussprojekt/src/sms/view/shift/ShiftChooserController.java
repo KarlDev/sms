@@ -1,5 +1,6 @@
 package sms.view.shift;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -55,7 +56,7 @@ public class ShiftChooserController {
     private BorderPane rightSplitBP;
 
     //Week that is currently selected
-    private SimpleIntegerProperty currentWeekID = new SimpleIntegerProperty();
+    private IntegerProperty currentWeekID = new SimpleIntegerProperty();
 
     //Employees who can be assigned in current week
     private ObservableList<Employee> selectableEmps = FXCollections.observableArrayList();
@@ -172,7 +173,7 @@ public class ShiftChooserController {
         return currentWeekID.get();
     }
 
-    public SimpleIntegerProperty currentWeekIDProperty() {
+    public IntegerProperty currentWeekIDProperty() {
         return currentWeekID;
     }
 

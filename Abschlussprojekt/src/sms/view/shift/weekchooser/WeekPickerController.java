@@ -46,35 +46,31 @@ public class WeekPickerController {
     public void setMainControllerAndShiftController(MainController mc, ShiftChooserController scc) {
         this.mc = mc;
         this.scc = scc;
-
-        week.bindBidirectional(scc.currentWeekIDProperty());
+        week = scc.currentWeekIDProperty();
         datePicker.valueProperty().addListener((observable, oldValue, newDate) -> {
             //If not monday change to monday
             int dayOfWeek = newDate.getDayOfWeek().getValue();
             if(dayOfWeek != 1)
                 datePicker.setValue(datePicker.getValue().minusDays( dayOfWeek - 1 ));
 
-            //Set week
+            //Set weekID
             week.set(newDate.get(WeekFields.of(Locale.GERMANY).weekOfWeekBasedYear()));
-            System.out.println("Week: " + week.getValue() + " Day: " + datePicker.getValue().getDayOfWeek());
         });
 
-        datePicker.showingProperty().addListener((observable, oldValue, showing) -> {
-            if(showing) {
-                //Get the content
-                DatePickerContent content = (DatePickerContent)((DatePickerSkin)datePicker.getSkin()).getPopupContent();
-                content.lookupAll(".day-cell").forEach(cell -> {
-                    int weekOfCell = ((DateCell)cell).getItem().get(WeekFields.of(Locale.GERMANY).weekOfWeekBasedYear());
-                    if(week.get() == weekOfCell - 300000){
-                        cell.getStyleClass().add("selected");
-                        System.out.println("hi");
-                    }
-                    //else cell.getStyleClass().remove("selected");
-                    //cell.getStyleClass().add("selected");
-                    cell.getStyleClass().add("selected");
-                    //System.out.println(cell.getStyleClass() + " Day: " + ((DateCell) cell).getItem());
-                });
-            }
+        datePicker.setOnShown(event -> {
+            //Get the content
+            DatePickerContent content = (DatePickerContent)((DatePickerSkin)datePicker.getSkin()).getPopupContent();
+            //All Cells
+            content.lookupAll(".day-cell").forEach(cell -> {
+                int weekOfCell = ((DateCell)cell).getItem().get(WeekFields.of(Locale.GERMANY).weekOfWeekBasedYear());
+                //Of selected Week
+                if(week.get() == weekOfCell){
+                    //And add selected if monday-friday
+                    if( ((DateCell)cell).getItem().getDayOfWeek().getValue() < 6)
+                       cell.getStyleClass().add("selected");
+                    //Otherwise remove selected
+                } else cell.getStyleClass().remove("selected");
+            });
         });
 
         prefWeekButt.setOnAction(event -> prefWeek());
